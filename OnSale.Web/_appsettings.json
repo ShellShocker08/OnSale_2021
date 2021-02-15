@@ -1,0 +1,14 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  // SQL ConnectionString
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Initial Catalog=OnSale;Persist Security Info=True;User=admin;Password=*****"
+  }
+}
