@@ -12,7 +12,7 @@ namespace OnSale.Web.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         // Objetos que se crean en la BD
-        public DbSet<Country> Country { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
