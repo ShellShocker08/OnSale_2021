@@ -20,7 +20,7 @@ The project is based on [Zuluaga's Tutorial](https://www.youtube.com/playlist?li
 | --------------------------------------------------|---------|
 | NETStandard.Library                               | 2.0.3   |
 | System.ComponentModel.Annotations                 | 5.0.0   |
-| Newtonsoft.Json                                   | 10.0.3  |
+| Newtonsoft.Json                                   | 12.0.3  |
 
 ### OnSale.Web
 
