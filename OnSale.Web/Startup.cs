@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnSale.Web.Data;
+using OnSale.Web.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,9 @@ namespace OnSale.Web
 
             //SeederDb
             services.AddTransient<SeedDb>();
+
+            //Helpers
+            services.AddScoped<IConverterHelper, ConverterHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

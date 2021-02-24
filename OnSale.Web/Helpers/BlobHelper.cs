@@ -3,9 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnSale.Web.Helpers
@@ -31,7 +29,7 @@ namespace OnSale.Web.Helpers
         {
             Stream stream = file.OpenReadStream();
             return await UploadStreamAsync(stream, containerName);
-        }        
+        }
 
         public async Task<Guid> UploadBlobAsync(string image, string containerName)
         {
