@@ -195,13 +195,33 @@ namespace OnSale.Web.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Details), new { id = state.IdCountry });
 
-                }                
+                }
                 catch (Exception exception)
                 {
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
 
+            return View(state);
+        }
+
+        public async Task<IActionResult> DetailsState(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States
+                .Include(d => d.Cities)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+
+            Country country = await _context.Countries.FirstOrDefaultAsync(c => c.States.FirstOrDefault(d => d.Id == state.Id) != null);
+            state.IdCountry = country.Id;
             return View(state);
         }
 
@@ -235,7 +255,7 @@ namespace OnSale.Web.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Details), new { id = state.IdCountry });
 
-                }                
+                }
                 catch (Exception exception)
                 {
                     ModelState.AddModelError(string.Empty, exception.Message);
@@ -265,27 +285,113 @@ namespace OnSale.Web.Controllers
             return RedirectToAction(nameof(Details), new { id = country.Id });
         }
 
-        public async Task<IActionResult> DetailsState(int? id)
+        public async Task<IActionResult> AddCity(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            State state = await _context.States
-                .Include(d => d.Cities)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            State state = await _context.States.FindAsync(id);
             if (state == null)
             {
                 return NotFound();
             }
 
-            Country country = await _context.Countries.FirstOrDefaultAsync(c => c.States.FirstOrDefault(d => d.Id == state.Id) != null);
-            state.IdCountry = country.Id;
-            return View(state);
+            City model = new City { IdState = state.Id };
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCity(City city)
+        {
+            if (ModelState.IsValid)
+            {
+                State state = await _context.States
+                    .Include(d => d.Cities)
+                    .FirstOrDefaultAsync(c => c.Id == city.IdState);
+                if (state == null)
+                {
+                    return NotFound();
+                }
 
+                try
+                {
+                    city.Id = 0;
+                    state.Cities.Add(city);
+                    _context.Update(state);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(DetailsState), new { id = state.Id });
 
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+
+            return View(city);
+        }
+
+        public async Task<IActionResult> EditCity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            City city = await _context.Cities.FindAsync(id);
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States.FirstOrDefaultAsync(d => d.Cities.FirstOrDefault(c => c.Id == city.Id) != null);
+            city.IdState = state.Id;
+            return View(city);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditCity(City city)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(city);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(DetailsState), new { id = city.IdState });
+
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(city);
+        }
+
+        public async Task<IActionResult> DeleteCity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            City city = await _context.Cities
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States.FirstOrDefaultAsync(d => d.Cities.FirstOrDefault(c => c.Id == city.Id) != null);
+            _context.Cities.Remove(city);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(DetailsState), new { id = state.Id });
+
+        }
     }
 }
