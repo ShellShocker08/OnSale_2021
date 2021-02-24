@@ -17,7 +17,7 @@ namespace OnSale.Common.Entities
 
         public ICollection<State> States { get; set; }
 
-        [DisplayName("# States")]
+        [DisplayName("# Estados")]
         public int StatesNumber => States == null ? 0 : States.Count;
 
     }

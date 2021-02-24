@@ -20,7 +20,8 @@ namespace OnSale.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Countries               
+            return View(await _context.Countries
+                .Include(c => c.States)
                 .ToListAsync());
         }
 
@@ -69,8 +70,8 @@ namespace OnSale.Web.Controllers
             }
 
             Country country = await _context.Countries
-                //.Include(c => c.States)
-                //.ThenInclude(s => s.Cities)
+                .Include(c => c.States)
+                .ThenInclude(s => s.Cities)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (country == null)
@@ -153,5 +154,53 @@ namespace OnSale.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> AddState(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Country country = await _context.Countries.FindAsync(id);
+            if (country == null)
+            {
+                return NotFound();
+            }
+
+            State model = new State { IdCountry = country.Id };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddState(State state)
+        {
+            if (ModelState.IsValid)
+            {
+                Country country = await _context.Countries
+                    .Include(c => c.States)
+                    .FirstOrDefaultAsync(c => c.Id == state.IdCountry);
+                if (country == null)
+                {
+                    return NotFound();
+                }
+
+                try
+                {
+                    state.Id = 0;
+                    country.States.Add(state);
+                    _context.Update(country);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { id = state.IdCountry });
+
+                }                
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+
+            return View(state);
+        }
     }
 }
