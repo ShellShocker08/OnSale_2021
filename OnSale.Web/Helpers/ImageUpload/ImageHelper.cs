@@ -41,7 +41,26 @@ namespace OnSale.Web.Helpers
                 }
             }
             return await UploadImageAsync(imageFile, containerName);
-        }        
+        }
+
+        public async Task<bool> DeleteImageAsync(string oldPath)
+        {
+            string path = oldPath.Replace("/", "\\").Replace("~", "wwwroot");
+            path = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                $"{path}");
+
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch
+            {
+                //TODO: Log Image No Eliminada
+                return false;
+            }
+        }
 
         private string CreateFolder(string containerName)
         {
@@ -85,23 +104,6 @@ namespace OnSale.Web.Helpers
             }
 
             return folder;
-        }
-
-        public void DeleteImageAsync(string oldPath)
-        {
-            string path = oldPath.Replace("/", "\\").Replace("~", "wwwroot");
-            path = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                $"{path}");
-
-            try
-            {
-                File.Delete(path);
-            }
-            catch
-            {
-                //TODO: Log Image No Eliminada
-            }
         }
     }
 }

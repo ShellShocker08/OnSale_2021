@@ -149,7 +149,7 @@ namespace OnSale.Web.Controllers
 
             try
             {
-                _imageHelper.DeleteImageAsync(category.ImagePath);
+                await _imageHelper.DeleteImageAsync(category.ImagePath);
                 _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
             }

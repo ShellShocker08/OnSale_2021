@@ -10,6 +10,6 @@ namespace OnSale.Web.Helpers
     {
         Task<string> UploadImageAsync(IFormFile file, string containerName);
         Task<string> UpdateImageAsync(IFormFile file, string containerName, bool saveLast, string oldPath);
-        void DeleteImageAsync(string oldPath);
+        Task<bool> DeleteImageAsync(string oldPath);
     }
 }
