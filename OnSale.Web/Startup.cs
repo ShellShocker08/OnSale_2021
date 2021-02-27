@@ -38,6 +38,7 @@ namespace OnSale.Web
 
             //Helpers
             services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IImageHelper, ImageHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

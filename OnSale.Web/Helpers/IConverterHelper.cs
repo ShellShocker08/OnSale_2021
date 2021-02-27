@@ -6,8 +6,7 @@ namespace OnSale.Web.Helpers
 {
     public interface IConverterHelper
     {
-        Category ToCategory(CategoryViewModel model, Guid imageId, bool isNew);
-
+        Category ToCategory(CategoryViewModel model, string imagePath, bool isNew);
         CategoryViewModel ToCategoryViewModel(Category category);
 
     }

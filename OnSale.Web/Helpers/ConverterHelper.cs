@@ -6,12 +6,12 @@ namespace OnSale.Web.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
-        public Category ToCategory(CategoryViewModel model, Guid imageId, bool isNew)
+        public Category ToCategory(CategoryViewModel model, string imagePath, bool isNew)
         {
             return new Category
             {
                 Id = isNew ? 0 : model.Id,
-                ImageId = imageId,
+                ImagePath = imagePath,
                 Name = model.Name
             };
         }
@@ -21,7 +21,7 @@ namespace OnSale.Web.Helpers
             return new CategoryViewModel
             {
                 Id = category.Id,
-                ImageId = category.ImageId,
+                ImagePath = category.ImagePath,
                 Name = category.Name
             };
         }

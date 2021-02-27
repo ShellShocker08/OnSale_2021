@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 
 namespace OnSale.Common.Entities
 {
@@ -31,13 +29,12 @@ namespace OnSale.Common.Entities
 
         public ICollection<ProductImage> ProductImages { get; set; }
 
-        [DisplayName("# Imágenes")] 
+        [DisplayName("# Imágenes")]
         public int ProductImagesNumber => ProductImages == null ? 0 : ProductImages.Count;
-        
-        //TODO: Pending to put the correct paths
+
         [Display(Name = "Imagen")]
         public string ImageFullPath => ProductImages == null || ProductImages.Count == 0
-            ? $"https://localhost:44390/images/noimage.png"
-            : ProductImages.FirstOrDefault().ImageFullPath;
+            ? $"~/img/static/noimage.png"
+            : $"{ProductImages.FirstOrDefault().ImageFullPath}";
     }
 }
