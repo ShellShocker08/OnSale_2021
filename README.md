@@ -13,7 +13,7 @@ The project is based on [Zuluaga's Tutorial](https://www.youtube.com/playlist?li
 * The Image Storage [(ImageHelper)](https://github.com/ShellShocker08/OnSale_2021/blob/main/OnSale.Web/Helpers/ImageUpload/ImageHelper.cs) is local with different functions:
     * **UploadImageAsync:** Upload Image with date structure
     * **UpdateImageAsync:** Update Image and check if you want to keep track of image history or delete previous and create new one
-    * **DeleteImage** Delete Image from server  
+    * **DeleteImage:** Delete Image from server  
 
 
 
@@ -35,4 +35,4 @@ The project is based on [Zuluaga's Tutorial](https://www.youtube.com/playlist?li
 | Microsoft.EntityFrameworkCore                     | 5.0.0   |
 | Microsoft.EntityFrameworkCore.Tools               | 5.0.0   |
 | Microsoft.EntityFrameworkCore.SqlServer           | 5.0.0   |
-| Windows.Azure.Storage                             | 9.3.3   |
+| Windows.Azure.Storage (only for Blob Storage)     | 9.3.3   |
