@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnSale.Web.Data;
+using OnSale.Web.Data.Entities;
 using OnSale.Web.Helpers;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,17 @@ namespace OnSale.Web
                 cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // IdentityUser
+            services.AddIdentity<User, IdentityRole>(cfg =>
+            {
+                cfg.User.RequireUniqueEmail = true;
+                cfg.Password.RequireDigit = false;
+                cfg.Password.RequiredUniqueChars = 0;
+                cfg.Password.RequireLowercase = false;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<DataContext>();
+
             //SeederDb
             services.AddTransient<SeedDb>();
 
@@ -40,6 +53,7 @@ namespace OnSale.Web
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
+            services.AddScoped<IUserHelper, UserHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,6 +72,8 @@ namespace OnSale.Web
 
             app.UseRouting();
 
+            // UserIdentity
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
