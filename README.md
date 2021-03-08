@@ -35,4 +35,5 @@ The project is based on [Zuluaga's Tutorial](https://www.youtube.com/playlist?li
 | Microsoft.EntityFrameworkCore                     | 5.0.0   |
 | Microsoft.EntityFrameworkCore.Tools               | 5.0.0   |
 | Microsoft.EntityFrameworkCore.SqlServer           | 5.0.0   |
+| Microsoft.AspNetCore.Authentication.JwtBearer     | 5.0.0   |
 | Windows.Azure.Storage (only for Blob Storage)     | 9.3.3   |
