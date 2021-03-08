@@ -28,9 +28,23 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a style="color:palevioletred" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
-                        <li><a style="color:palevioletred" asp-area="" asp-controller="Countries" asp-action="Index">Países</a></li>
-                        <li><a style="color:palevioletred" asp-area="" asp-controller="Categories" asp-action="Index">Categorías</a></li>
-                        <li><a style="color:palevioletred" asp-area="" asp-controller="Products" asp-action="Index">Productos</a></li>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li><a style="color:palevioletred" asp-area="" asp-controller="Countries" asp-action="Index">Países</a></li>
+                            <li><a style="color:palevioletred" asp-area="" asp-controller="Categories" asp-action="Index">Categorías</a></li>
+                            <li><a style="color:palevioletred" asp-area="" asp-controller="Products" asp-action="Index">Productos</a></li>
+                        }
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><a style="color:palevioletred" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a></li>
+                            <li><a style="color:palevioletred" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a></li>
+                        }
+                        else
+                        {
+                            <li><a style="color:palevioletred" asp-area="" asp-controller="Account" asp-action="Login">Iniciar Sesión</a></li>
+                        }
                     </ul>
                 </div>
             </div>
