@@ -10,5 +10,10 @@
   // SQL ConnectionString
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Initial Catalog=OnSale;Persist Security Info=True;User=admin;Password=*****"
+  },
+  "Tokens": {
+    "Key": "asdfghjikbnRRUREDFJDLKJF69877vcgfdsrtfyLKJHGFRTGVC543FDhgcvgfx_dg708ctrreSSssSwwsswrrrRRRRWYUIY",
+    "Issuer": "localhost",
+    "Audience": "users"
   }
 }
