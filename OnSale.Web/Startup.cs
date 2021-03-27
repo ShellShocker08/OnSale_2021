@@ -43,6 +43,15 @@ namespace OnSale.Web
                 cfg.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<DataContext>();
 
+            // ErrorPages
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
+            });
+
+
+            // API Token
             services.AddAuthentication()
                 .AddCookie()
                 .AddJwtBearer(cfg =>
@@ -69,13 +78,17 @@ namespace OnSale.Web
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Home/Error/{0}");
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Error/{0}");
                 app.UseHsts();
             }
+
+            // ErrorPages
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
