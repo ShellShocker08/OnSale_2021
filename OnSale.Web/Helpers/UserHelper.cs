@@ -4,6 +4,7 @@ using OnSale.Common.Enums;
 using OnSale.Web.Data;
 using OnSale.Web.Data.Entities;
 using OnSale.Web.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace OnSale.Web.Helpers
@@ -16,8 +17,8 @@ namespace OnSale.Web.Helpers
         private readonly SignInManager<User> _signInManager;
 
         public UserHelper(
-            DataContext context, 
-            UserManager<User> userManager, 
+            DataContext context,
+            UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<User> signInManager)
         {
@@ -106,5 +107,23 @@ namespace OnSale.Web.Helpers
             await AddUserToRoleAsync(newUser, user.UserType.ToString());
             return newUser;
         }
+
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        }
+
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<User> GetUserAsync(Guid userId)
+        {
+            return await _context.Users
+                .Include(u => u.City)
+                .FirstOrDefaultAsync(u => u.Id == userId.ToString());
+        }
+
     }
 }

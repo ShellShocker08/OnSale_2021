@@ -156,5 +156,77 @@ namespace OnSale.Web.Controllers
             return Json(state.Cities.OrderBy(c => c.Name));
         }
 
+        public async Task<IActionResult> ChangeUser()
+        {
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            State department = await _context.States.FirstOrDefaultAsync(d => d.Cities.FirstOrDefault(c => c.Id == user.City.Id) != null);
+            if (department == null)
+            {
+                department = await _context.States.FirstOrDefaultAsync();
+            }
+
+            Country country = await _context.Countries.FirstOrDefaultAsync(c => c.States.FirstOrDefault(d => d.Id == department.Id) != null);
+            if (country == null)
+            {
+                country = await _context.Countries.FirstOrDefaultAsync();
+            }
+
+            EditUserViewModel model = new EditUserViewModel
+            {
+                Address = user.Address,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                ImagePath = user.ImagePath,
+                Cities = _combosHelper.GetComboCities(department.Id),
+                CityId = user.City.Id,
+                Countries = _combosHelper.GetComboCountries(),
+                CountryId = country.Id,
+                StateId = department.Id,
+                Departments = _combosHelper.GetComboStates(country.Id),
+                Id = user.Id,
+                Document = user.Document
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUser(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string imageId = model.ImagePath;
+
+                if (model.ImageFile != null)
+                {
+                    imageId = await _imageHelper.UpdateImageAsync(model.ImageFile, null, false, model.ImagePath);
+                }
+
+                User user = await _userHelper.GetUserAsync(User.Identity.Name);
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.ImagePath = imageId;
+                user.City = await _context.Cities.FindAsync(model.CityId);
+                user.Document = model.Document;
+
+                await _userHelper.UpdateUserAsync(user);
+                return RedirectToAction("Index", "Home");
+            }
+
+            model.Cities = _combosHelper.GetComboCities(model.StateId);
+            model.Countries = _combosHelper.GetComboCountries();
+            model.Departments = _combosHelper.GetComboStates(model.CityId);
+            return View(model);
+        }
     }
 }
